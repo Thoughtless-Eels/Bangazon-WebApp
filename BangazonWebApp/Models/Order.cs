@@ -18,12 +18,12 @@ namespace BangazonWebApp.Models
         public DateTime DateCreated { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
         [Required]
         public ApplicationUser User { get; set; }
 
-        public int PaymentTypeId { get; set; }
+        public int? PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
 
         public virtual ICollection<LineItem> LineItems { get; set; }

@@ -42,6 +42,8 @@ namespace BangazonWebApp.Models
 
         public ProductType ProductType { get; set; }
 
+        public ICollection<LineItem> LineItems { get; set; }
+
     }
 }
 
