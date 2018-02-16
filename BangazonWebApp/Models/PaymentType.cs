@@ -28,6 +28,7 @@ namespace BangazonWebApp.Models
         [Required]
         public ApplicationUser User { get; set; }
 
-     
+        public ICollection<Order> Orders { get; set; }
+
     }
 }
