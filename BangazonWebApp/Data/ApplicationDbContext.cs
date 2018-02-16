@@ -31,15 +31,15 @@ namespace BangazonWebApp.Data
 
             modelBuilder.Entity<Product>()
                 .Property(b => b.DateCreated)
-                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+                .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<Order>()
                 .Property(b => b.DateCreated)
-                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+                .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<PaymentType>()
                 .Property(b => b.DateCreated)
-                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+                .HasDefaultValueSql("GETDATE()");
 
         }
     }

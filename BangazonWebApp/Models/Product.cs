@@ -33,6 +33,8 @@ namespace BangazonWebApp.Models
         [Required]
         public double Price { get; set; }
 
+        public string Photo { get; set; }
+
         [Required]
         public ApplicationUser User { get; set; }
 
