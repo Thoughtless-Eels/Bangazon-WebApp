@@ -15,6 +15,6 @@ namespace BangazonWebApp.Models
         [Required]
         public string ProductTypeName { get; set; }
 
-
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

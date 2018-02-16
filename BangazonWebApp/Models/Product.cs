@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace BangazonWebApp.Models
 {
-    public class ProductModel
-    {
+    public class Product   {
 
         [Key]
         public int ProductId { get; set; }
