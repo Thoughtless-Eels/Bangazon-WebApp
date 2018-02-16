@@ -18,6 +18,10 @@ namespace BangazonWebApp.Models
         public int Quantity { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        public DateTime DateCreated { get; set; }
+
+        [Required]
         [StringLength(255)]
         public string Description { get; set; }
 
@@ -25,6 +29,7 @@ namespace BangazonWebApp.Models
         [StringLength(55, ErrorMessage = "Please shorten the product title to 55 characters")]
         public string Title { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Required]
         public double Price { get; set; }
 

@@ -20,8 +20,9 @@ namespace BangazonWebApp.Models
         [DataType(DataType.Date)]
         public DateTime DateCompleted { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; }
 
         //add PaymentType constructor and ICollection for Items//
+  
     }
 }

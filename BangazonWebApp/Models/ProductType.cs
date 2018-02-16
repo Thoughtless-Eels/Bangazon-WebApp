@@ -13,6 +13,8 @@ namespace BangazonWebApp.Models
         public int ProductTypeId { get; set; }
 
         [Required]
+        [StringLength(255)]
+        [Display(Name = "Category")]
         public string ProductTypeName { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
