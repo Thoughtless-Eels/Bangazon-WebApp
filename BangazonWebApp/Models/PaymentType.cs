@@ -27,5 +27,7 @@ namespace BangazonWebApp.Models
 
         [Required]
         public ApplicationUser User { get; set; }
+
+     
     }
 }
