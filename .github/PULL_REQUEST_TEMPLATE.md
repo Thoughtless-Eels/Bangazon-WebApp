@@ -1,5 +1,5 @@
 ## Link to Ticket
-Closes # [Link]()
+Ticket: # [Link]()
 
 ## Description of Proposed Changes
 
