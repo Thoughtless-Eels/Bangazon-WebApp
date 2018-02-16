@@ -21,6 +21,8 @@ namespace BangazonWebApp.Models
         [Required]
         public string StreetAddress { get; set; }
 
+        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentType> PaymentTypes { get; set; }
     }
 }
