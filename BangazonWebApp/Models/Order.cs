@@ -18,10 +18,14 @@ namespace BangazonWebApp.Models
         public DateTime DateCreated { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        [Required]
+        public ApplicationUser User { get; set; }
 
-        //add PaymentType constructor and ICollection for Items//
+        public int? PaymentTypeId { get; set; }
+        public PaymentType PaymentType { get; set; }
+
+        public virtual ICollection<LineItem> LineItems { get; set; }
     }
 }
