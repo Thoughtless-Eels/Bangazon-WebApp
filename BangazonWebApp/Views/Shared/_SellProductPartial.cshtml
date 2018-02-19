@@ -1,24 +1,16 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿
+@using Microsoft.AspNetCore.Identity
 @using BangazonWebApp.Models
-
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="" asp-controller="Product" asp-action="AddProductToSell" method="post" id="AddProductToSell" class="navbar-right">
-        <ul class="nav navbar-nav">
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Sell Product</button>
-            </li>
-        </ul>
-    </form>
+    <ul class="nav navbar-nav">
+        <li><a asp-area="" asp-controller="Products" asp-action="Create">Sell A Product</a></li>
+    </ul>
+
+
 }
 
-
-
-@page
-@model SellProductModel
-@{
-}
