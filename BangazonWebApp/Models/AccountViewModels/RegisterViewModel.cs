@@ -34,7 +34,6 @@ namespace BangazonWebApp.Models.AccountViewModels
 
         [Required]
         [Display(Name = "Street Address")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string StreetAddress { get; set; }
     }
 }
