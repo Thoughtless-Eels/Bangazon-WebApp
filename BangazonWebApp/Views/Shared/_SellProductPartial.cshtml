@@ -1,0 +1,16 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@using BangazonWebApp.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="nav navbar-nav">
+        <li><a asp-area="" asp-controller="Products" asp-action="Create">Sell A Product</a></li>
+    </ul>
+
+
+}
+
