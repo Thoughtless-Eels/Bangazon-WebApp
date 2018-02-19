@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
@@ -200,7 +201,8 @@ namespace BangazonWebApp.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     Description = table.Column<string>(maxLength: 255, nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    LocalDelivery = table.Column<bool>(nullable: false),
+                    Location = table.Column<string>(nullable: true),
                     Photo = table.Column<string>(nullable: true),
                     Price = table.Column<double>(nullable: false),
                     ProductTypeId = table.Column<int>(nullable: false),
@@ -216,7 +218,7 @@ namespace BangazonWebApp.Migrations
                         column: x => x.ProductTypeId,
                         principalTable: "ProductType",
                         principalColumn: "ProductTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_AspNetUsers_UserId",
                         column: x => x.UserId,
