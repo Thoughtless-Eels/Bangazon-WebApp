@@ -15,6 +15,8 @@ namespace BangazonWebApp.Views.Manage
 
         public static string ChangePassword => "ChangePassword";
 
+        public static string AddPaymentType => "AddPaymentType";
+
         public static string ExternalLogins => "ExternalLogins";
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
@@ -22,6 +24,8 @@ namespace BangazonWebApp.Views.Manage
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
+
+        public static string AddPaymentTypeNavClass(ViewContext viewContext) => PageNavClass(viewContext, AddPaymentType);
 
         public static string ExternalLoginsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExternalLogins);
 
