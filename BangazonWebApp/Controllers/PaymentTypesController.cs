@@ -7,18 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BangazonWebApp.Controllers
 {
     public class PaymentTypesController : Controller
-    {
-        private readonly ApplicationDbContext _context;
 
-        public PaymentTypesController(ApplicationDbContext context)
+    //add additions to allow payment type to create and save successfully:
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
+        public PaymentTypesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager )
         {
+            _userManager = userManager;
             _context = context;
         }
-
+//end additions:
         // GET: PaymentTypes
         public async Task<IActionResult> Index()
         {
