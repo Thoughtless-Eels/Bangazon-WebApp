@@ -12,7 +12,8 @@ namespace BangazonWebApp.Models
         public int ProductId { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        [StringLength(55, ErrorMessage = "Please shorten the product title to 55 characters")]
+        public string Title { get; set; }
 
         [Required]
         public int Quantity { get; set; }
@@ -25,13 +26,16 @@ namespace BangazonWebApp.Models
         [StringLength(255)]
         public string Description { get; set; }
 
-        [Required]
-        [StringLength(55, ErrorMessage = "Please shorten the product title to 55 characters")]
-        public string Title { get; set; }
-
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Required]
         public double Price { get; set; }
+
+        [Required]
+        [Display(Name = "Local Delivery")]
+        public bool LocalDelivery { get; set; }
+
+        [Display(Name = "Product Location")]
+        public string Location { get; set; }
 
         public string Photo { get; set; }
 

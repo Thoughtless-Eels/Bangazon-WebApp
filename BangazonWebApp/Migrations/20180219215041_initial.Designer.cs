@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace BangazonWebApp.Data.Migrations
+namespace BangazonWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180219215041_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,19 +81,39 @@ namespace BangazonWebApp.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("BangazonWebApp.Models.LineItem", b =>
+                {
+                    b.Property<int>("LineItemId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("ProductId");
+
+                    b.HasKey("LineItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("LineItem");
+                });
+
             modelBuilder.Entity("BangazonWebApp.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateCompleted");
+                    b.Property<DateTime?>("DateCompleted");
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<int?>("PaymentTypeId");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("OrderId");
 
@@ -113,7 +134,8 @@ namespace BangazonWebApp.Data.Migrations
                         .HasMaxLength(20);
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -134,12 +156,19 @@ namespace BangazonWebApp.Data.Migrations
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<bool>("LocalDelivery");
+
+                    b.Property<string>("Location");
+
+                    b.Property<string>("Photo");
 
                     b.Property<double>("Price");
 
@@ -169,7 +198,8 @@ namespace BangazonWebApp.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ProductTypeName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.HasKey("ProductTypeId");
 
@@ -284,15 +314,29 @@ namespace BangazonWebApp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BangazonWebApp.Models.LineItem", b =>
+                {
+                    b.HasOne("BangazonWebApp.Models.Order", "Order")
+                        .WithMany("LineItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BangazonWebApp.Models.Product", "Product")
+                        .WithMany("LineItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("BangazonWebApp.Models.Order", b =>
                 {
-                    b.HasOne("BangazonWebApp.Models.PaymentType")
+                    b.HasOne("BangazonWebApp.Models.PaymentType", "PaymentType")
                         .WithMany("Orders")
                         .HasForeignKey("PaymentTypeId");
 
                     b.HasOne("BangazonWebApp.Models.ApplicationUser", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BangazonWebApp.Models.PaymentType", b =>
