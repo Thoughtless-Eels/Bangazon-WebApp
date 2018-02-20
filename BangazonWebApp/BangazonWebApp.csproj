@@ -5,24 +5,6 @@
     <UserSecretsId>aspnet-BangazonWebApp-781BEA76-0DC0-47EA-A019-C8034389ECEE</UserSecretsId>
   </PropertyGroup>
 
-<<<<<<< HEAD
-  <ItemGroup>
-    <Compile Remove="Migrations\20180216215620_initial.cs" />
-    <Compile Remove="Migrations\20180216215620_initial.Designer.cs" />
-    <Compile Remove="Migrations\20180216220654_initial.cs" />
-    <Compile Remove="Migrations\20180216220654_initial.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="appsettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="appsettings.json" />
-  </ItemGroup>
-
-=======
->>>>>>> e9f2d7a2e125882e271726fcd33e9aef61c61d1c
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
