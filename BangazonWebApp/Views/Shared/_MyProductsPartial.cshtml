@@ -1,0 +1,16 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@using BangazonWebApp.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@*display a link to allow user to create a product to sell. only display link if user is signed in.*@
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="nav navbar-nav">
+        <li><a asp-area="" asp-controller="Products" asp-action="Index">Product</a></li>
+    </ul>
+
+
+}
+
