@@ -7,17 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BangazonWebApp.Controllers
 {
     public class ProductsController : Controller
     {
+        // create an instance of the UserManager to be able to retrieve the current active user
+        private readonly UserManager<ApplicationUser> _userManager;
+
         private readonly ApplicationDbContext _context;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
+        // This task retrieves the currently authenticated user
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
         public async Task<IActionResult> Index()
@@ -46,9 +55,11 @@ namespace BangazonWebApp.Controllers
         }
 
         // GET: Products/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName");
+
             return View();
         }
 
@@ -59,8 +70,23 @@ namespace BangazonWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,Title,Quantity,DateCreated,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
+            // Remove the user from the model validation because it is
+            // not information posted in the form
+            ModelState.Remove("User");
+
             if (ModelState.IsValid)
             {
+
+                /*
+                    If all other properties validate, then grab the 
+                    currently authenticated user and assign it to the 
+                    product before adding it to the db _context
+                */
+                var user = await GetCurrentUserAsync();
+                product.User = user;
+
+
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -7,11 +7,11 @@
 
  @*display a link to allow user to create a product to sell. only display link if user is signed in.*@ 
 @if (SignInManager.IsSignedIn(User))
-{
+  {
     <ul class="nav navbar-nav">
         <li><a asp-area="" asp-controller="Products" asp-action="Create">Sell A Product</a></li>
     </ul>
 
 
-}
+  }
 
