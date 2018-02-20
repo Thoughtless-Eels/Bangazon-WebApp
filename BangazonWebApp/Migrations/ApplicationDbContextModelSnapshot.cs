@@ -163,8 +163,9 @@ namespace BangazonWebApp.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<bool>("LocalDelivery");
+
+                    b.Property<string>("Location");
 
                     b.Property<string>("Photo");
 

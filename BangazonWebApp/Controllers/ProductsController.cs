@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BangazonWebApp.Models;
 using BangazonWebApp.Data;
+using BangazonWebApp.Models;
 
 namespace BangazonWebApp.Controllers
 {
@@ -22,8 +22,8 @@ namespace BangazonWebApp.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var ApplicationDbContext = _context.Product.Include(p => p.ProductType);
-            return View(await ApplicationDbContext.ToListAsync());
+            var applicationDbContext = _context.Product.Include(p => p.ProductType);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -48,7 +48,7 @@ namespace BangazonWebApp.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.Set<ProductType>(), "ProductTypeId", "ProductTypeName");
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace BangazonWebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Quantity,DateCreated,Description,Title,Price,Photo,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Title,Quantity,DateCreated,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace BangazonWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.Set<ProductType>(), "ProductTypeId", "ProductTypeName", product.ProductTypeId);
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName", product.ProductTypeId);
             return View(product);
         }
 
@@ -82,7 +82,7 @@ namespace BangazonWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.Set<ProductType>(), "ProductTypeId", "ProductTypeName", product.ProductTypeId);
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName", product.ProductTypeId);
             return View(product);
         }
 
@@ -91,7 +91,7 @@ namespace BangazonWebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Quantity,DateCreated,Description,Title,Price,Photo,ProductTypeId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Title,Quantity,DateCreated,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -118,7 +118,7 @@ namespace BangazonWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.Set<ProductType>(), "ProductTypeId", "ProductTypeName", product.ProductTypeId);
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName", product.ProductTypeId);
             return View(product);
         }
 
