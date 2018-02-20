@@ -11,22 +11,27 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BangazonWebApp.Controllers
 {
-    public class PaymentTypesController : Controller
+    public class PaymentTypesController : Controller { 
+ // create an instance of the UserManager to be able to retrieve the current active user:
+       private readonly UserManager<ApplicationUser> _userManager;
+       private readonly ApplicationDbContext _context;
 
-    //add additions to allow payment type to create and save successfully:
+        //create new instances of the manager and context:
+    public PaymentTypesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _context;
-        public PaymentTypesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager )
-        {
-            _userManager = userManager;
-            _context = context;
-        }
-//end additions:
-        // GET: PaymentTypes
-        public async Task<IActionResult> Index()
+        _context = context;
+        _userManager = userManager;
+    }
+    // This task retrieves the currently authenticated user:
+    private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+//added code ends
+
+    // GET: PaymentTypes
+    public async Task<IActionResult> Index()
         {
             return View(await _context.PaymentType.ToListAsync());
+           // var applicationDbContext = _context.PaymentType.Include(p => p.PaymentType);
+           // return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: PaymentTypes/Details/5
@@ -60,8 +65,10 @@ namespace BangazonWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PaymentTypeId,DateCreated,Description,AccountNumber")] PaymentType paymentType)
         {
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
+                paymentType.User = await GetCurrentUserAsync();
                 _context.Add(paymentType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
