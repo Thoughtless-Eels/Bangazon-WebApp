@@ -75,10 +75,8 @@ namespace BangazonWebApp.Controllers
         // GET: Products/Create
         // Returns the Create a Product view
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName");
-
 
             CreateProductViewModel productViewModel = new CreateProductViewModel(_context);
 
@@ -95,11 +93,10 @@ namespace BangazonWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Quantity,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
+            // remove the user validation check since we do not attach the user object to the form
+            ModelState.Remove("product.User");
 
-            ModelState.Remove("User");
-            //ModelState.Remove("Product.Title");
-            //ModelState.Remove("Product.Description");
-
+            // if all of the other fields validate on model, attach the current user to product and save to database
             if (ModelState.IsValid)
             {
                 var user = await GetCurrentUserAsync();
@@ -108,8 +105,10 @@ namespace BangazonWebApp.Controllers
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                // redirect the user to the details view of the product they just added
                 return RedirectToAction("Details", new { Id = product.ProductId });
             }
+            // if the validation fails, display the create product view model
             CreateProductViewModel cpvm = new CreateProductViewModel(_context);
             return View(cpvm);
         }
