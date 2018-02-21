@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
+using BangazonWebApp.Models.ProductTypeViewModels;
 
 namespace BangazonWebApp.Controllers
 {
@@ -42,6 +43,30 @@ namespace BangazonWebApp.Controllers
 
             return View(productType);
         }
+
+        //Types from Steves code
+        public async Task<IActionResult> Types()
+        {
+            var model = new ShowProductTypesViewModel();
+
+            // Build list of Product instances for display in view
+            // LINQ is awesome
+             model.Products = await (
+                 from t in _context.ProductType
+                 join p in _context.Product
+                 on t.ProductTypeId equals p.ProductTypeId
+                 group new { t, p } by new { t.ProductTypeId, t.ProductTypeName } into grouped
+                 select new Products
+                 {
+                     TypeId = grouped.Key.ProductTypeId,
+                     TypeName = grouped.Key.Label,
+                     ProductCount = grouped.Select(x => x.p.ProductId).Count(),
+                     Products = grouped.Select(x => x.p).Take(3)
+                 }).ToListAsync();
+
+            return View(model);
+        }
+        //Steves code ends here
 
         // GET: ProductTypes/Create
         public IActionResult Create()

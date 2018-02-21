@@ -1,39 +1,24 @@
 ﻿using BangazonWebApp.Data;
+using BangazonWebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BangazonWebApp.Models.ProductTypeViewModels
+namespace Bangazon.Models.ProductTypeViewModels
 {
-    public class ShowProductTypesViewModel
-    {
-        public IEnumerable<ProductTypeDisplayModel> GroupedProducts { get; set; }
-
-        public ShowProductTypesViewModel(ApplicationDbContext ctx)
+        public class ShowProductTypesViewModel
         {
-            //create a constructor that is going to populate the IEenumerbale:
-            this.GroupedProducts = ctx.ProductType
-            .AsEnumerable()
-            .Select(pt => new ProductTypeDisplayModel
+            public class GroupedProducts
             {
-                ProductCategoryName = pt.ProductTypeName,
-                //populate the products list by matching the product types id on the product type were iterating through:
-
-                CategoryProducts = ctx.Product.Where(p => p.ProductTypeId == pt.ProductTypeId).ToList()
-            });
-                    
-         }
-
-
-
-
+                public int TypeId { get; set; }
+                public string TypeName { get; set; }
+                public int ProductCount { get; set; }
+                public IEnumerable<Product> Products { get; set; }
+            }
         }
+}
 
 
 
-
-    }
-
-    
 

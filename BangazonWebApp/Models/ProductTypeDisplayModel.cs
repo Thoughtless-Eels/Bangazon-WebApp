@@ -9,6 +9,7 @@ namespace BangazonWebApp.Models
     {
         public string ProductCategoryName { get; set; }
         public List<Product> CategoryProducts {get;set;}
+        public double ProductCount { get; set; }
 
     }
 }
