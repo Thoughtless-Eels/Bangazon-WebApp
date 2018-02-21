@@ -135,19 +135,19 @@ namespace BangazonWebApp.Controllers
         //}
 
         // POST: ProductTypes/Delete/5
-    //    [HttpPost, ActionName("Delete")]
-    //    [ValidateAntiForgeryToken]
-    //    public async Task<IActionResult> DeleteConfirmed(int id)
-    //    {
-    //        var productType = await _context.ProductType.SingleOrDefaultAsync(m => m.ProductTypeId == id);
-    //        _context.ProductType.Remove(productType);
-    //        await _context.SaveChangesAsync();
-    //        return RedirectToAction(nameof(Index));
-    //    }
+       [HttpPost, ActionName("Delete")]
+       [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var productType = await _context.ProductType.SingleOrDefaultAsync(m => m.ProductTypeId == id);
+            _context.ProductType.Remove(productType);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-    //    private bool ProductTypeExists(int id)
-    //    {
-    //        return _context.ProductType.Any(e => e.ProductTypeId == id);
-    //    }
+        private bool ProductTypeExists(int id)
+        {
+            return _context.ProductType.Any(e => e.ProductTypeId == id);
+     }
     }
 }

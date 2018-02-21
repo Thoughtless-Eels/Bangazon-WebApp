@@ -37,4 +37,3 @@ namespace BangazonWebApp.Models.ProductTypeViewModels
 
     
 
-}
