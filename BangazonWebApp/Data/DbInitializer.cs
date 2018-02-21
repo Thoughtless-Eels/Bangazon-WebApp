@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
 
-namespace Bangazon.Data
+namespace BangazonWebApp.Data
 {
     public static class DbInitializer
     {

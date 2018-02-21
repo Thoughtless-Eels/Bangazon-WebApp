@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
+using BangazonWebApp.Models.ProductViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,6 +15,7 @@ namespace BangazonWebApp.Controllers
 {
     public class ProductsController : Controller
     {
+
         // create an instance of the UserManager to be able to retrieve the current active user
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -21,6 +23,7 @@ namespace BangazonWebApp.Controllers
 
         public ProductsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
             _userManager = userManager;
         }
@@ -68,7 +71,11 @@ namespace BangazonWebApp.Controllers
         {
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName");
 
-            return View();
+
+            CreateProductViewModel productViewModel = new CreateProductViewModel(_context);
+
+            return View(productViewModel);
+
         }
 
         // POST: Products/Create
@@ -76,31 +83,24 @@ namespace BangazonWebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Title,Quantity,DateCreated,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("Title,Quantity,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
-            // Remove the user from the model validation because it is
-            // not information posted in the form
-            ModelState.Remove("User");
+
+            ModelState.Remove("Product.User");
+            ModelState.Remove("Product.Title");
+            ModelState.Remove("Product.Description");
 
             if (ModelState.IsValid)
             {
-
-                /*
-                    If all other properties validate, then grab the 
-                    currently authenticated user and assign it to the 
-                    product before adding it to the db _context
-                */
                 var user = await GetCurrentUserAsync();
                 product.User = user;
-
-
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName", product.ProductTypeId);
-            return View(product);
+            CreateProductViewModel cpvm = new CreateProductViewModel(_context);
+            return View(cpvm);
         }
 
         // GET: Products/Edit/5
