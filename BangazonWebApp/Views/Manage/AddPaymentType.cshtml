@@ -1,0 +1,19 @@
+﻿@model AddPaymentTypeViewModel
+@{
+    ViewData["Title"] = "Add a PaymentType";
+    ViewData.AddActivePage(ManageNavPages.AddPaymentType);
+}
+
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<div>
+   <p> Payment Page is displaying!, yay </p>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+
+
+
