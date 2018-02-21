@@ -96,9 +96,9 @@ namespace BangazonWebApp.Controllers
         public async Task<IActionResult> Create([Bind("Title,Quantity,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
 
-            ModelState.Remove("Product.User");
-            ModelState.Remove("Product.Title");
-            ModelState.Remove("Product.Description");
+            ModelState.Remove("User");
+            //ModelState.Remove("Product.Title");
+            //ModelState.Remove("Product.Description");
 
             if (ModelState.IsValid)
             {

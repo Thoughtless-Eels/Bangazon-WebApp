@@ -50,6 +50,7 @@ namespace BangazonWebApp.Models
 
         public ICollection<LineItem> LineItems { get; set; }
 
+
     }
 }
 
