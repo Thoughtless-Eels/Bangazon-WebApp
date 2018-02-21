@@ -108,7 +108,7 @@ namespace BangazonWebApp.Controllers
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { Id = product.ProductId });
             }
             CreateProductViewModel cpvm = new CreateProductViewModel(_context);
             return View(cpvm);
