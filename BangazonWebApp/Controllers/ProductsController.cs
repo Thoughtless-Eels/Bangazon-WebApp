@@ -8,30 +8,41 @@ using Microsoft.EntityFrameworkCore;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
 using BangazonWebApp.Models.ProductViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace BangazonWebApp.Controllers
 {
     public class ProductsController : Controller
     {
+
+        // create an instance of the UserManager to be able to retrieve the current active user
         private readonly UserManager<ApplicationUser> _userManager;
+
         private readonly ApplicationDbContext _context;
 
         public ProductsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _context = context;
+            _userManager = userManager;
         }
-
 
         // This task retrieves the currently authenticated user
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Product.Include(p => p.ProductType);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Products added by current user
+        public async Task<IActionResult> MyProducts()
+        {
+            var user = await GetCurrentUserAsync();
+            var applicationDbContext = _context.Product.Include(p => p.ProductType).Where(p => p.User == user);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -55,13 +66,16 @@ namespace BangazonWebApp.Controllers
         }
 
         // GET: Products/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName");
 
+
             CreateProductViewModel productViewModel = new CreateProductViewModel(_context);
 
             return View(productViewModel);
+
         }
 
         // POST: Products/Create
@@ -72,7 +86,6 @@ namespace BangazonWebApp.Controllers
         public async Task<IActionResult> Create([Bind("Title,Quantity,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
 
-
             ModelState.Remove("Product.User");
             ModelState.Remove("Product.Title");
             ModelState.Remove("Product.Description");
@@ -81,6 +94,7 @@ namespace BangazonWebApp.Controllers
             {
                 var user = await GetCurrentUserAsync();
                 product.User = user;
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
