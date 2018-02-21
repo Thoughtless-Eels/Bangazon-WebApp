@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BangazonWebApp.Data;
 using BangazonWebApp.Models;
+using BangazonWebApp.Models.ProductViewModels;
 
 namespace BangazonWebApp.Controllers
 {
@@ -49,7 +50,10 @@ namespace BangazonWebApp.Controllers
         public IActionResult Create()
         {
             ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName");
-            return View();
+
+            CreateProductViewModel productViewModel = new CreateProductViewModel(_context);
+
+            return View(productViewModel);
         }
 
         // POST: Products/Create

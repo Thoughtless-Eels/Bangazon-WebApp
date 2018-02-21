@@ -5,13 +5,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BangazonWebApp.Models.ProductViewModels
 {
-    public class ProductCreateViewModel
+    public class CreateProductViewModel
     {
+        
+        public string Title { get; set; }
+
+        public int Quantity { get; set; }
+
+        public string Description { get; set; }
+
+        public double Price { get; set; }
+
+        public bool LocalDelivery { get; set; }
+
+        public string Location { get; set; }
+    
+        public string Photo { get; set; }
+
         public List<SelectListItem> ProductTypes { get; set; }
         public Product Product { get; set; }
 
-        public string UserRole { get; set; }
-        public ProductCreateViewModel(ApplicationDbContext ctx)
+        public int ProductTypeId { get; set; }
+        public ProductType ProductType { get; set; }
+
+
+        public CreateProductViewModel(ApplicationDbContext ctx)
         {
 
             this.ProductTypes = ctx.ProductType
