@@ -103,11 +103,8 @@ namespace BangazonWebApp.Controllers
             if (ModelState.IsValid)
             {
                 var user = await GetCurrentUserAsync();
-<<<<<<< HEAD
-                product.User = user
-=======
+
                 product.User = user;
->>>>>>> master
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
