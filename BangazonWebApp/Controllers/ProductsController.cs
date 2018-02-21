@@ -61,7 +61,7 @@ namespace BangazonWebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Title,Quantity,DateCreated,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("Title,Quantity,Description,Price,LocalDelivery,Location,Photo,ProductTypeId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -69,8 +69,8 @@ namespace BangazonWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "ProductTypeName", product.ProductTypeId);
-            return View(product);
+            CreateProductViewModel cpvm = new CreateProductViewModel(_context);
+            return View(cpvm);
         }
 
         // GET: Products/Edit/5
