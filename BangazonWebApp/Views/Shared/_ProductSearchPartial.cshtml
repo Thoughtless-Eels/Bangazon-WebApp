@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BangazonWebApp.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <div class="navbar-left" style="margin-top:8px;">
+        @using (Html.BeginForm("SearchForProduct", "Products", FormMethod.Post))
+        {
+            <ul class="nav navbar-left navbar-nav">
+                <li>@Html.TextBox("search", ViewBag.CurrentFilter as string, null, new { @class = "form-control",  @placeholder = "Search For Product" })</li>
+            </ul>
+        }
+    </div>
+}
+else
+{
+<ul class="nav navbar-nav navbar-right">
+    <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+    <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+</ul>
+}
