@@ -23,12 +23,6 @@
             @Html.DisplayFor(model => model.Quantity)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd>
@@ -67,6 +61,7 @@
     </dl>
 </div>
 <div>
+    <a asp-controller="Products" asp-action="AddProductToCart" asp-route-id="@Model.ProductId">Add To Order</a>
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

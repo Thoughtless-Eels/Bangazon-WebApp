@@ -242,8 +242,9 @@ namespace BangazonWebApp.Controllers
         /*
             Method to add a product to the shopping cart (LineItem join table)
         */
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> AddProductCart([FromRoute] int id)
+        public async Task<IActionResult> AddProductToCart([FromRoute] int id)
         {
             // Find the product requested
             Product productToAdd = await _context.Product.SingleOrDefaultAsync(p => p.ProductId == id);
@@ -252,19 +253,27 @@ namespace BangazonWebApp.Controllers
             var user = await GetCurrentUserAsync();
 
             // Get open order, if exists, otherwise null
-            Order openOrder = null;
-            openOrder = await _context.Order.SingleOrDefaultAsync(o => o.User == user);
+            Order openOrder = await _context.Order.SingleOrDefaultAsync(o => o.User == user && o.PaymentTypeId == null);
 
             // Didn't find an open order
             if (openOrder == null)
             {
 
                 // Create new order
-                Order newOrder = null;
+                Order newOrder = new Order();
+                // add the current user to the order
+                newOrder.User = user;
+                // add the order to the db context file
                 _context.Add(newOrder);
 
                 // Create new line item
-                LineItem li = null;
+                LineItem li = new LineItem()
+                {
+                    // add the product Id and the order Id to the line item
+                    ProductId = id,
+                    OrderId = newOrder.OrderId
+                };
+                // add the lineitem to the db context file
                 _context.Add(li);
 
             }
@@ -273,9 +282,12 @@ namespace BangazonWebApp.Controllers
             {
 
                 // Create new line item
-                LineItem li = null;
-
-                // Add ProductId and OrderId to LineItem
+                LineItem li = new LineItem()
+                {
+                    // add the product Id and the order Id to the line item
+                    ProductId = id,
+                    OrderId = openOrder.OrderId
+                };
 
                 // Add line item to db context
                 _context.Add(li);
@@ -285,7 +297,7 @@ namespace BangazonWebApp.Controllers
             // Save all items in the db context
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(OrderController.Index), "Order");
+            return RedirectToAction(nameof(Index));
         }
     }
 }
