@@ -238,5 +238,54 @@ namespace BangazonWebApp.Controllers
 
             return View(product);
         }
+
+        /*
+            Method to add a product to the shopping cart (LineItem join table)
+        */
+        [Authorize]
+        public async Task<IActionResult> AddProductCart([FromRoute] int id)
+        {
+            // Find the product requested
+            Product productToAdd = await _context.Product.SingleOrDefaultAsync(p => p.ProductId == id);
+
+            // Get the current user
+            var user = await GetCurrentUserAsync();
+
+            // Get open order, if exists, otherwise null
+            Order openOrder = null;
+            openOrder = await _context.Order.SingleOrDefaultAsync(o => o.User == user);
+
+            // Didn't find an open order
+            if (openOrder == null)
+            {
+
+                // Create new order
+                Order newOrder = null;
+                _context.Add(newOrder);
+
+                // Create new line item
+                LineItem li = null;
+                _context.Add(li);
+
+            }
+            else
+                // Open order exists
+            {
+
+                // Create new line item
+                LineItem li = null;
+
+                // Add ProductId and OrderId to LineItem
+
+                // Add line item to db context
+                _context.Add(li);
+
+            }
+
+            // Save all items in the db context
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(OrderController.Index), "Order");
+        }
     }
 }
