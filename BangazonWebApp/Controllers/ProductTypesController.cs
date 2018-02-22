@@ -20,6 +20,10 @@ namespace BangazonWebApp.Controllers
             _context = context;
         }
 
+
+        // Get: Products of a certain category
+
+
         // GET: ProductTypes
         public async Task<IActionResult> Index()
         {
@@ -54,7 +58,7 @@ namespace BangazonWebApp.Controllers
                 return NotFound();
             }
 
-            var productType = await _context.ProductType
+            var productType = await _context.ProductType.Include("Products")
                 .SingleOrDefaultAsync(m => m.ProductTypeId == id);
             if (productType == null)
             {

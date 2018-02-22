@@ -50,6 +50,7 @@
                 <input asp-for="@Model.Product.Photo" class="form-control" />
                 <span asp-validation-for="@Model.Product.Photo" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Product.ProductTypeId)
                 @Html.DropDownList(

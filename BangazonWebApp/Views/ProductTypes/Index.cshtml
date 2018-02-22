@@ -13,7 +13,7 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ProductTypeName)
+                     @Html.DisplayNameFor(model => model.ProductTypeName)
                 </th>
             <th></th>
         </tr>
@@ -22,7 +22,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductTypeName) @item.ProductCount
+               <a asp-area="" asp-controller="ProductTypes" asp-action="Details" asp-route-id="@item.ProductTypeId"> @Html.DisplayFor(modelItem => item.ProductTypeName)</a> @item.ProductCount
             </td>
             <td>
                 @foreach (var product in item.CategoryProducts){
