@@ -7,8 +7,9 @@ namespace BangazonWebApp.Models
 {
     public class ProductTypeDisplayModel
     {
-        public string ProductCategoryName { get; set; }
-        public List<Product> CategoryProducts {get;set;}
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
+        public List<Product> CategoryProducts { get;set; }
         public double ProductCount { get; set; }
 
     }

@@ -23,7 +23,27 @@ namespace BangazonWebApp.Controllers
         // GET: ProductTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ProductType.ToListAsync());
+           // return View(await _context.ProductType.ToListAsync());
+            var model = new List<ProductTypeDisplayModel>();
+
+            // Build list of Product instances for display in view
+            // LINQ is awesome
+            model = await (
+                from t in _context.ProductType
+                join p in _context.Product
+                on t.ProductTypeId equals p.ProductTypeId
+                group new { t, p } by new { t.ProductTypeId, t.ProductTypeName } into grouped
+                select new ProductTypeDisplayModel
+                {
+                    ProductTypeId = grouped.Key.ProductTypeId,
+                    ProductTypeName = grouped.Key.ProductTypeName,
+                    ProductCount = grouped.Select(x => x.p.ProductId).Count(),
+                    CategoryProducts = grouped.Select(x => x.p).Take(3).ToList()
+                }).ToListAsync();
+
+            return View(model);
+
+
         }
 
         // GET: ProductTypes/Details/5
@@ -47,22 +67,22 @@ namespace BangazonWebApp.Controllers
         //Types from Steves code
         public async Task<IActionResult> Types()
         {
-            var model = new ShowProductTypesViewModel();
+            var model = new List<ProductTypeDisplayModel>();
 
             // Build list of Product instances for display in view
             // LINQ is awesome
-             model.Products = await (
-                 from t in _context.ProductType
-                 join p in _context.Product
-                 on t.ProductTypeId equals p.ProductTypeId
-                 group new { t, p } by new { t.ProductTypeId, t.ProductTypeName } into grouped
-                 select new Products
-                 {
-                     TypeId = grouped.Key.ProductTypeId,
-                     TypeName = grouped.Key.Label,
-                     ProductCount = grouped.Select(x => x.p.ProductId).Count(),
-                     Products = grouped.Select(x => x.p).Take(3)
-                 }).ToListAsync();
+            model = await (
+                from t in _context.ProductType
+                join p in _context.Product
+                on t.ProductTypeId equals p.ProductTypeId
+                group new { t, p } by new { t.ProductTypeId, t.ProductTypeName } into grouped
+                select new ProductTypeDisplayModel
+                {
+                    ProductTypeId = grouped.Key.ProductTypeId,
+                    ProductTypeName = grouped.Key.ProductTypeName,
+                    ProductCount = grouped.Select(x => x.p.ProductId).Count(),
+                    CategoryProducts = grouped.Select(x => x.p).Take(3).ToList()
+                }).ToListAsync();
 
             return View(model);
         }
