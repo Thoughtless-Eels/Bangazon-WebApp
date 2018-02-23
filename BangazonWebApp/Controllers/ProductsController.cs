@@ -10,6 +10,7 @@ using BangazonWebApp.Models;
 using BangazonWebApp.Models.ProductViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using BangazonWebApp.Models.ProductTypeViewModels;
 
 // Author: Greg Lawrence
 // Purpose: To handle actions dealing with Products
@@ -60,10 +61,24 @@ namespace BangazonWebApp.Controllers
             {
                 return NotFound();
             }
-
+            // find the product requested
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .SingleOrDefaultAsync(m => m.ProductId == id);
+
+            // find the amount times this product has sold and return the number
+            var SoldAmount = (
+                from o in _context.Order
+                join li in _context.LineItem on o.OrderId equals li.OrderId
+                join p in _context.Product on li.ProductId equals p.ProductId
+                where o.PaymentType != null && p.ProductId == id
+                group p by p.ProductId into inv
+                select inv).ToList().Count;
+
+            // use the amount sold number to calculate the available inventory for this product
+            product.Quantity -= SoldAmount;
+
+            // if the product can't be found, return Not Found()
             if (product == null)
             {
                 return NotFound();
