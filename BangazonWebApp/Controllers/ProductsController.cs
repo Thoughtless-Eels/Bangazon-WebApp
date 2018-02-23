@@ -61,6 +61,11 @@ namespace BangazonWebApp.Controllers
             {
                 return NotFound();
             }
+
+            // get the current user to check if the user created the product, and if they did, display the "Edit" link
+            ViewBag.user = GetCurrentUserAsync();
+                
+
             // find the product requested
             var product = await _context.Product
                 .Include(p => p.ProductType)

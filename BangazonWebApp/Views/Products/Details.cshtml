@@ -53,8 +53,12 @@
     </dl>
 </div>
 <div>
-    <button asp-action="AddProductToCart" asp-route-id="Model.ProductId">Add To Order</button>
-    <a asp-controller="Products" asp-action="AddProductToCart" asp-route-id="@Model.ProductId">Add To Order</a> | 
+
+    
+    <a asp-controller="Products" asp-action="AddProductToCart" asp-route-id="@Model.ProductId">
+        <input type="button" value="Add To Order" class="btn btn-primary" /></a> 
+    <br />
+    <br />
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
