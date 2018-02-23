@@ -23,12 +23,6 @@
             @Html.DisplayFor(model => model.Quantity)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd>
@@ -40,33 +34,31 @@
         <dd>
             @Html.DisplayFor(model => model.Price)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LocalDelivery)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LocalDelivery)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Location)
-        </dd>
+        @if (Model.LocalDelivery == true)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Location)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Location)
+            </dd>
+        }
         <dt>
             @Html.DisplayNameFor(model => model.Photo)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Photo)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductType.ProductTypeName)
-        </dd>
+       
     </dl>
 </div>
 <div>
+
+    
+    <a asp-controller="Products" asp-action="AddProductToCart" asp-route-id="@Model.ProductId">
+        <input type="button" value="Add To Order" class="btn btn-primary" /></a> 
+    <br />
+    <br />
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -10,6 +10,7 @@ using BangazonWebApp.Models;
 using BangazonWebApp.Models.ProductViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using BangazonWebApp.Models.ProductTypeViewModels;
 
 // Author: Greg Lawrence
 // Purpose: To handle actions dealing with Products
@@ -61,9 +62,28 @@ namespace BangazonWebApp.Controllers
                 return NotFound();
             }
 
+            // get the current user to check if the user created the product, and if they did, display the "Edit" link
+            ViewBag.user = GetCurrentUserAsync();
+                
+
+            // find the product requested
             var product = await _context.Product
                 .Include(p => p.ProductType)
                 .SingleOrDefaultAsync(m => m.ProductId == id);
+
+            // find the amount times this product has sold and return the number
+            var SoldAmount = (
+                from o in _context.Order
+                join li in _context.LineItem on o.OrderId equals li.OrderId
+                join p in _context.Product on li.ProductId equals p.ProductId
+                where o.PaymentType != null && p.ProductId == id
+                group p by p.ProductId into inv
+                select inv).ToList().Count;
+
+            // use the amount sold number to calculate the available inventory for this product
+            product.Quantity -= SoldAmount;
+
+            // if the product can't be found, return Not Found()
             if (product == null)
             {
                 return NotFound();
@@ -237,6 +257,67 @@ namespace BangazonWebApp.Controllers
             }
 
             return View(product);
+        }
+
+        /*
+            Method to add a product to the shopping cart (LineItem join table)
+        */
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> AddProductToCart([FromRoute] int id)
+        {
+            // Find the product requested
+            Product productToAdd = await _context.Product.SingleOrDefaultAsync(p => p.ProductId == id);
+
+            // Get the current user
+            var user = await GetCurrentUserAsync();
+
+            // Get open order, if exists, otherwise null
+            Order openOrder = await _context.Order.SingleOrDefaultAsync(o => o.User == user && o.PaymentTypeId == null);
+
+            // Didn't find an open order
+            if (openOrder == null)
+            {
+
+                // Create new order
+                Order newOrder = new Order();
+                // add the current user to the order
+                newOrder.User = user;
+                // add the order to the db context file
+                _context.Add(newOrder);
+
+                // Create new line item
+                LineItem li = new LineItem()
+                {
+                    // add the product Id and the order Id to the line item
+                    ProductId = id,
+                    OrderId = newOrder.OrderId
+                };
+                // add the lineitem to the db context file
+                _context.Add(li);
+
+            }
+            else
+                // Open order exists
+            {
+
+                // Create new line item
+                LineItem li = new LineItem()
+                {
+                    // add the product Id and the order Id to the line item
+                    ProductId = id,
+                    OrderId = openOrder.OrderId
+                };
+
+                // Add line item to db context
+                _context.Add(li);
+
+            }
+
+            // Save all items in the db context
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
